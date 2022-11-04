@@ -1,5 +1,5 @@
 {
-  "name": "Power Flow Card",
+  "name": "System Flow Card",
   "render_readme": true,
   "homeassistant": "2021.8.0"
 }

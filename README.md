@@ -1,14 +1,14 @@
-# Power Flow Card
+# System Flow Card
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=flat-square)](https://github.com/hacs/integration)
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/ulic75/power-flow-card?style=flat-square)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ulic75/power-flow-card/CI?style=flat-square)
-![GitHub all releases](https://img.shields.io/github/downloads/ulic75/power-flow-card/total?style=flat-square)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/ulic75/system-flow-card?style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/ulic75/system-flow-card/CI?style=flat-square)
+![GitHub all releases](https://img.shields.io/github/downloads/ulic75/system-flow-card/total?style=flat-square)
 [![ko-fi support](https://img.shields.io/badge/support-me-ff5e5b?style=flat-square&logo=ko-fi)](https://ko-fi.com/ulic75)
 
-This card for [Home Assistant](https://home-assistant.io/) Dashboards is designed to provide power distribution in an identical style to the Official Energy Distribution card included by Home Assistant.
+This card for [Home Assistant](https://home-assistant.io/) Dashboards is designed to provide system distribution in an identical style to the Official Energy Distribution card included by Home Assistant.
 
-![power-flow-2 4 0](https://user-images.githubusercontent.com/5641964/169116530-f5ddefc4-6ee1-46cc-b89e-a8d8fabaa892.png)
+![system-flow-2 4 0](https://user-images.githubusercontent.com/5641964/169116530-f5ddefc4-6ee1-46cc-b89e-a8d8fabaa892.png)
 
 ## Install
 
@@ -19,17 +19,17 @@ This card is available in [HACS](https://hacs.xyz/) (Home Assistant Community St
 
 ### Manual install
 
-1. Download and copy `power-flow-card.js` from the [latest release](https://github.com/ulic75/power-flow-card/releases/latest) into your `config/www` directory.
+1. Download and copy `system-flow-card.js` from the [latest release](https://github.com/ulic75/system-flow-card/releases/latest) into your `config/www` directory.
 
 2. Add the resource reference as decribed below.
 
 ### Add resource reference
 
-If you configure Dashboards via YAML, add a reference to `power-flow-card.js` inside your `configuration.yaml`:
+If you configure Dashboards via YAML, add a reference to `system-flow-card.js` inside your `configuration.yaml`:
 
 ```yaml
 resources:
-  - url: /local/power-flow-card.js
+  - url: /local/system-flow-card.js
     type: module
 ```
 
@@ -40,8 +40,8 @@ Else, if you prefer the graphical editor, use the menu to add the resource:
 3. Click three dot icon
 4. Select Resources
 5. Hit (+ ADD RESOURCE) icon
-6. Enter URL `/local/power-flow-card.js` and select type "JavaScript Module".
-   (Use `/hacsfiles/power-flow-card/power-flow-card.js` and select "JavaScript Module" for HACS install if HACS didn't do it already)
+6. Enter URL `/local/system-flow-card.js` and select type "JavaScript Module".
+   (Use `/hacsfiles/system-flow-card/system-flow-card.js` and select "JavaScript Module" for HACS install if HACS didn't do it already)
 
 ## Using the card
 
@@ -54,7 +54,7 @@ I recommend looking at the [Example usage section](#example-usage) to understand
 
 | Name              | Type     |   Default    | Description                                                                                                                                                                  |
 | ----------------- | -------- | :----------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| type              | `string` | **required** | `custom:power-flow-card`.                                                                                                                                                    |
+| type              | `string` | **required** | `custom:system-flow-card`.                                                                                                                                                    |
 | entities          | `object` | **required** | One or more sensor entities, see [entities object](#entities-object) for additional entity options.                                                                          |
 | title             | `string` |              | Shows a title at the top of the card.                                                                                                                                        |
 | dashboard_link    | `string` |              | Shows a link to an Energy Dashboard. Should be a url path to location of your choice. If you wanted to link to the built-in dashboard you would enter `/energy` for example. |
@@ -92,7 +92,7 @@ Can be use with either Grid or Battery configuration. The same `unit_of_measurem
 Using combined entities for grid, battery and solor that support positive state values for consumption and negative state values for production.
 
 ```yaml
-type: custom:power-flow-card
+type: custom:system-flow-card
 entities:
   battery: sensor.battery_in_out
   battery_charge: sensor.battery_percent
@@ -105,7 +105,7 @@ entities:
 Using combined entites as above but where the battery and grid entities are inverted (negative = consumption and positive = production).
 
 ```yaml
-type: custom:power-flow-card
+type: custom:system-flow-card
 entities:
   battery: sensor.battery_in_out
   battery_charge: sensor.battery_percent
@@ -119,7 +119,7 @@ inverted_entities: battery, grid
 Using split entities for grid and battery where each consumption and production entity state has a positive value.
 
 ```yaml
-type: custom:power-flow-card
+type: custom:system-flow-card
 entities:
   battery:
     consumption: sensor.battery_out
