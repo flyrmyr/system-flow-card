@@ -1,18 +1,9 @@
 import { LovelaceCardConfig } from "custom-card-helpers";
-import { ComboEntity } from "./type.js";
+import { SystemElementDef, ElementDef } from "./type.js";
 
 export interface SystemFlowCardConfig extends LovelaceCardConfig {
-  entities: {
-    battery?: string | ComboEntity;
-    battery_charge?: string;
-    grid: string | ComboEntity;
-    solar?: string;
-  };
-  dashboard_link?: string;
-  inverted_entities: string | string[];
-  kw_decimals: number;
-  min_flow_rate: number;
-  max_flow_rate: number;
-  w_decimals: number;
-  watt_threshold: number;
+  elements: Array<ElementDef>;
+  system?: SystemElementDef;
+  speed?: number;
+  fadeIdylElements?: boolean;
 }
