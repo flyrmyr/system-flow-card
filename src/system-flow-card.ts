@@ -411,7 +411,7 @@ export class SystemFlowCard extends LitElement {
       --mdc-icon-size: 24px;
     }
     ha-card {
-      overflow: scroll;
+      overflow: auto;
       display: flex;
       flex-direction: column;
     }

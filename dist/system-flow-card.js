@@ -162,7 +162,7 @@ return function(t){return!isNaN(parseFloat(t))&&!isNaN(Number(t))}(t)?Number(t):
       --mdc-icon-size: 24px;
     }
     ha-card {
-      overflow: scroll;
+      overflow: auto;
       display: flex;
       flex-direction: column;
     }
