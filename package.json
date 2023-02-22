@@ -32,7 +32,7 @@
     "eslint-plugin-lit-a11y": "^2.2.3",
     "home-assistant-js-websocket": "^7.0.3",
     "lit": "^2.2.2",
-    "tslib": "^2.4.0"
+    "tslib": "^2.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",
