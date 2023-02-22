@@ -2,7 +2,7 @@
 import { HomeAssistant, stateIcon } from "custom-card-helpers";
 import { HassEntity } from 'home-assistant-js-websocket';
 import { css, html, LitElement, svg, TemplateResult } from "lit";
-import { customElement, property, query, state } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { SystemFlowCardConfig } from "./system-flow-card-config.js";
 import {
   coerceNumber,
@@ -14,14 +14,7 @@ import { CalculatedElementDef } from "./type.js";
 @customElement("system-flow-card")
 export class SystemFlowCard extends LitElement {
   @property({ attribute: false }) public hass!: HomeAssistant;
-  @state() private _config?: SystemFlowCardConfig;
-
-  @query("#battery-grid-flow") batteryGridFlow?: SVGSVGElement;
-  @query("#battery-home-flow") batteryToHomeFlow?: SVGSVGElement;
-  @query("#grid-home-flow") gridToHomeFlow?: SVGSVGElement;
-  @query("#solar-battery-flow") solarToBatteryFlow?: SVGSVGElement;
-  @query("#solar-grid-flow") solarToGridFlow?: SVGSVGElement;
-  @query("#solar-home-flow") solarToHomeFlow?: SVGSVGElement;
+  @state() private _config = {} as SystemFlowCardConfig;
 
   setConfig(config: SystemFlowCardConfig): void {
     if (
@@ -43,7 +36,10 @@ export class SystemFlowCard extends LitElement {
         );
       }
     })
-    this._config = config;
+    this._config = {
+      ...config,
+      speed: coerceNumber(config.speed, 5),
+    }
   }
 
   public getCardSize(): Promise<number> | number {
@@ -61,6 +57,8 @@ export class SystemFlowCard extends LitElement {
 
     return entity;
   }
+
+  private previousDur: { [name: string]: number } = {};
 
   private getElementEntityId  = (element: CalculatedElementDef): string | undefined =>
     element.value
@@ -272,7 +270,7 @@ export class SystemFlowCard extends LitElement {
       },
     })
 
-    const elementPositions = {
+    const elementsByPosition = {
       left: elements.filter(element => element.position === 'left'),
       top: elements.filter(element => element.position === 'top'),
       right: elements.filter(element => element.position === 'right'),
@@ -280,43 +278,55 @@ export class SystemFlowCard extends LitElement {
       middle: elements.filter(element => element.position === 'middle')
     };
 
-    const posDimensionMap = {
-      "left": "position: absolute; left: 0; top: 10px; width: calc(50% - 42px); height: calc(100% - 20px);",
-      "top": "position: absolute; left: 10px; top: 0; width: calc(100% - 20px); height: calc(50% - 42px);",
-      "right": "position: absolute; left: calc(50% + 42px); top: 10px; width: calc(50% - 42px); height: calc(100% - 20px);",
-      "bottom": "position: absolute; left: 10px; top: calc(50% + 42px); width: calc(100% - 20px); height: calc(50% - 42px);",
+    const svgBoxStylesByPosition = {
+      'left': 'position: absolute; left: 0; top: 10px; width: calc(50% - 42px); height: calc(100% - 20px);',
+      'top': 'position: absolute; left: 10px; top: 0; width: calc(100% - 20px); height: calc(50% - 42px);',
+      'right': 'position: absolute; left: calc(50% + 42px); top: 10px; width: calc(50% - 42px); height: calc(100% - 20px);',
+      'bottom': 'position: absolute; left: 10px; top: calc(50% + 42px); width: calc(100% - 20px); height: calc(50% - 42px);',
     }
 
-    const linePosMap = {
-      'from': {
-        'left':   (pc, ipc)  => `M 100 ${ipc},  C 50 ${ipc},   50 ${pc},   0 ${pc}`,
-        'top':    (pc, ipc)  => `M ${ipc} 100,  C ${ipc} 50,   ${pc} 50,   ${pc} 0`,
-        'right':  (pc, ipc)  => `M 0 ${ipc},    C 50 ${ipc},   50 ${pc},   100 ${pc}`,
-        'bottom': (pc, ipc)  => `M ${ipc} 0,    C ${ipc} 50,   ${pc} 50,   ${pc} 100`,
-      }, 'to': {
-        'left':   (pc, ipc)  => `M 0 ${pc},     C 50 ${pc},   50 ${ipc}    100 ${ipc}`,
-        'top':    (pc, ipc)  => `M ${pc} 0,     C ${pc} 50,   ${ipc} 50    ${ipc} 100`,
-        'right':  (pc, ipc)  => `M 100 ${pc},   C 50 ${pc},   50 ${ipc}    0 ${ipc}`,
-        'bottom': (pc, ipc)  => `M ${pc} 100,   C ${pc} 50,   ${ipc} 50    ${ipc} 0`,
-      }
+    const svgLineMapByPosition = {
+      'left':   (pc, ipc)  => `M 100 ${ipc},  C 50 ${ipc},   50 ${pc},   0 ${pc}`,
+      'top':    (pc, ipc)  => `M ${ipc} 100,  C ${ipc} 50,   ${pc} 50,   ${pc} 0`,
+      'right':  (pc, ipc)  => `M 0 ${ipc},    C 50 ${ipc},   50 ${pc},   100 ${pc}`,
+      'bottom': (pc, ipc)  => `M ${ipc} 0,    C ${ipc} 50,   ${pc} 50,   ${pc} 100`,
     };
+
     const avgSystemTotal = elements
       .filter(element => element.calculations.systemTotal !== 0)
       .reduce((prev, element) => prev + Math.abs(element.calculations.systemTotal), 0)
       / elements.length;
+
     const lineCalcs = Object.fromEntries(['left', 'top', 'right', 'bottom'].map(position => {
-      const theseElements = elementPositions[position];
+      const theseElements = elementsByPosition[position];
       const height = 1 / (theseElements.length) * 100;
       return [position, theseElements.map((element, index) => {
+        const flowId: string = `flow-${position}-${index}`;
         const pc = ((index + 1) * height) - .5 * height;
         const ipc = 50 + -10 * (1 - pc / 50)
+        const path = svgLineMapByPosition[position](pc, ipc)
+        const dur = element.calculations.systemTotal && avgSystemTotal
+          ? (this._config.speed) / (Math.abs(element.calculations.systemTotal) / avgSystemTotal)
+          : 0
+
+        const flowSVGElement = (this.renderRoot?.querySelector(`#${flowId}`) ?? null) as SVGSVGElement;
+        if (
+          flowSVGElement &&
+          dur &&
+          this.previousDur[flowId] &&
+          this.previousDur[flowId] !== dur
+        ) {
+          flowSVGElement.pauseAnimations();
+          flowSVGElement.setCurrentTime(
+            flowSVGElement.getCurrentTime() *
+              (dur / this.previousDur[flowId])
+          );
+          flowSVGElement.unpauseAnimations();
+        }
+        this.previousDur[flowId] = dur;
+
         return {
-          element,
-          path: {
-            from: linePosMap.from[position](pc, ipc),
-            to: linePosMap.to[position](pc, ipc)
-          },
-          dur: (this._config?.speed ?? 5) * 1 / (Math.abs(element.calculations.systemTotal) / avgSystemTotal)
+          flowId, element, path, dur
         }
       })];
     }));
@@ -333,25 +343,25 @@ export class SystemFlowCard extends LitElement {
           
             <div class="col">
               <div class="spacer container-left"></div>
-              ${elementPositions.left.map(element => this.elementToHtml(element))}
+              ${elementsByPosition.left.map(element => this.elementToHtml(element))}
               <div class="spacer container-left"></div>
             </div>
 
             <div class="col">
               <div class="row">
-                ${elementPositions.top.length
-                  ? elementPositions.top.map(element => this.elementToHtml(element))
+                ${elementsByPosition.top.length
+                  ? elementsByPosition.top.map(element => this.elementToHtml(element))
                   : html`<div class="spacer container-top"></div>`
                 }
               </div>
 
               <div class="row">
-                ${elementPositions.middle.map(element => this.elementToHtml(element, true))}
+                ${elementsByPosition.middle.map(element => this.elementToHtml(element, true))}
               </div>
 
               <div class="row">
-                ${elementPositions.bottom.length
-                  ? elementPositions.bottom.map(element => this.elementToHtml(element))
+                ${elementsByPosition.bottom.length
+                  ? elementsByPosition.bottom.map(element => this.elementToHtml(element))
                   : html`<div class="spacer container-bottom"></div>`
                 }
               </div>
@@ -359,7 +369,7 @@ export class SystemFlowCard extends LitElement {
 
             <div class="col">
               <div class="spacer container-right"></div>
-              ${elementPositions.right.map(element => this.elementToHtml(element))}
+              ${elementsByPosition.right.map(element => this.elementToHtml(element))}
               <div class="spacer container-right"></div>
             </div>
 
@@ -367,36 +377,50 @@ export class SystemFlowCard extends LitElement {
               ${objectMap(lineCalcs, (pos, posLineCalcs) => html`
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  style="${posDimensionMap[pos]}"
+                  style="${svgBoxStylesByPosition[pos]}"
                   viewBox="0 0 100 100"
                   preserveAspectRatio="none"
-                  vector-effect="non-scaling-stroke"
                 >
                   ${posLineCalcs.map(posLineCalc => svg`
                     <path
-                      d="${posLineCalc.path.from}"
+                      d="${posLineCalc.path}"
                       stroke="${this.getElementColor(posLineCalc.element)}"
+                      vector-effect="non-scaling-size"
                       style="opacity: ${!posLineCalc.element.calculations.systemTotal && this._config?.fadeIdylElements ? .25 : 1};"
                     ></path>
-                    ${this.displayValue(posLineCalc.element.calculations.systemTotal) && svg`
-                      <circle
-                        r="1"
-                        vector-effect="non-scaling-stroke"
-                        style="
-                          stroke-width: 4;
-                          stroke: ${this.getElementColor(posLineCalc.element)};
-                          fill: ${this.getElementColor(posLineCalc.element)};
-                        "
-                      >
-                        <animateMotion
-                          dur="${posLineCalc.dur}"
-                          rotate="auto"
-                          repeatCount="indefinite"
-                          calcMode="linear"
-                          path="${posLineCalc.element.calculations.systemTotal > 0 ? posLineCalc.path.to : posLineCalc.path.from}"
-                        />
-                      </circle>
-                    `}
+                    ${this.displayValue(posLineCalc.element.calculations.systemTotal) &&
+                      html`
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          style="${svgBoxStylesByPosition[pos]}"
+                          viewBox="0 0 100 100"
+                          preserveAspectRatio="none"
+                          id="${posLineCalc.flowId}"
+                        >
+                          ${svg`
+                            <circle
+                              r="1"
+                              vector-effect="non-scaling-stroke"
+                              style="
+                                stroke-width: 4;
+                                stroke: ${this.getElementColor(posLineCalc.element)};
+                                fill: ${this.getElementColor(posLineCalc.element)};
+                              "
+                            >
+                              <animateMotion
+                                dur="${posLineCalc.dur}"
+                                rotate="auto"
+                                repeatCount="indefinite"
+                                calcMode="linear"
+                                path="${posLineCalc.path}"
+                                keyPoints="${posLineCalc.element.calculations.systemTotal > 0 ? '1;0' : '0;1'}"
+                                keyTimes="${posLineCalc.element.calculations.systemTotal > 0 ? '0;1' : '0;1'}"
+                              />
+                            </circle>
+                          `}
+                        </svg>
+                      `
+                    }
                   `)}
                 </svg>
               `)}
