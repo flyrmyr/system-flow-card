@@ -1,6 +1,6 @@
 {
   "name": "system-flow-card",
-  "version": "2.5.1",
+  "version": "0.1.0",
   "description": "A system flow card for Home Assistant",
   "keywords": [
     "home-assistant",
