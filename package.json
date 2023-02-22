@@ -31,7 +31,7 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-lit-a11y": "^2.2.3",
     "home-assistant-js-websocket": "^7.0.3",
-    "lit": "^2.2.2",
+    "lit": "^2.6.1",
     "tslib": "^2.4.0"
   },
   "devDependencies": {
