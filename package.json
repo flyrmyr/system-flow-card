@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "custom-card-helpers": "^1.9.0",
-    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-lit-a11y": "^2.2.3",
     "home-assistant-js-websocket": "^7.0.3",
     "lit": "^2.2.2",
