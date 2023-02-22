@@ -15,10 +15,3 @@ jobs:
       - uses: "hacs/action@main"
         with:
           category: "plugin"
-  
-  # Validate with Hassfest Action
-  hassfest:
-    runs-on: "ubuntu-latest"
-    steps:
-      - uses: "actions/checkout@v3"
-      - uses: "home-assistant/actions/hassfest@master"
