@@ -2775,10 +2775,10 @@ home-assistant-js-websocket@^6.0.1:
   resolved "https://registry.yarnpkg.com/home-assistant-js-websocket/-/home-assistant-js-websocket-6.1.1.tgz#87ba846753c4fb58a2e5ace6bb15a82689fd0735"
   integrity sha512-TnZFzF4mn5F/v0XKUTK2GMQXrn/+eQpgaSDSELl6U0HSwSbFwRhGWLz330YT+hiKMspDflamsye//RPL+zwhDw==
 
-home-assistant-js-websocket@^7.0.3:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/home-assistant-js-websocket/-/home-assistant-js-websocket-7.1.0.tgz#ebcf1f4ee980d5c45610d4cb1ab09ddf3e579125"
-  integrity sha512-P2KZApv0Y6T+VY8hS6SzE+jxaIHBJT2eIg3EhmM92P5HJN3545vWn3YhdkOyKEcEmm2DowqM4aSWA+TyhIKqRw==
+home-assistant-js-websocket@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/home-assistant-js-websocket/-/home-assistant-js-websocket-8.0.1.tgz#4c91f6e740600de9a59e0da3f018ea3487568415"
+  integrity sha512-CVi1yu4+hj3m3+ZxgzEYiP+UYFmjf/iAsUKVyCmhVm9T8Pn7ZCeW16O3pniC4h1DOmTuXW+z4v373UwKxVOMAg==
 
 hook-std@^2.0.0:
   version "2.0.0"
