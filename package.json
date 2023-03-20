@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.0",
-    "@babel/eslint-parser": "^7.17.0",
+    "@babel/eslint-parser": "^7.21.3",
     "@babel/eslint-plugin": "^7.17.7",
     "@google/semantic-release-replace-plugin": "^1.1.0",
     "@open-wc/eslint-config": "^9.2.2",
