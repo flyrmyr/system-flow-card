@@ -1943,6 +1943,11 @@ electron-to-chromium@^1.4.284:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.305.tgz#e4dfe3e06ab783f33171f9bde9e8ed092510fcd0"
   integrity sha512-WETy6tG0CT5gm1O+xCbyapWNsCcmIvrn4NHViIGYo2AT8FV2qUCXdaB+WqYxSv/vS5mFqhBYnfZAAkVArjBmUg==
 
+emoji-regex@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-10.2.1.tgz#a41c330d957191efd3d9dfe6e1e8e1e9ab048b3f"
+  integrity sha512-97g6QgOk8zlDRdgq1WxwgTMgEWGVAQvB5Fdpgc1MkNy56la5SKP9GsMXKDOdqwn90/41a8yPwIGk1Y6WVbeMQA==
+
 emoji-regex@^8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-8.0.0.tgz#e818fd69ce5ccfcb404594f842963bf53164cc37"
@@ -1969,6 +1974,11 @@ entities@^4.2.0, entities@^4.3.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/entities/-/entities-4.4.0.tgz#97bdaba170339446495e653cfd2db78962900174"
   integrity sha512-oYp7156SP8LkeGD0GF85ad1X9Ai79WtRsZ2gxJqtBuzH+98YUV6jkHEKlZkMbcrjJjIVJNIDP/3WL9wQkoPbWA==
+
+entities@^4.4.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/entities/-/entities-4.5.0.tgz#5d268ea5e7113ec74c4d033b79ea5a35a488fb48"
+  integrity sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==
 
 env-ci@^8.0.0:
   version "8.0.0"
@@ -2161,7 +2171,7 @@ eslint-plugin-import@^2.26.0, eslint-plugin-import@^2.27.5:
     semver "^6.3.0"
     tsconfig-paths "^3.14.1"
 
-eslint-plugin-lit-a11y@^2.2.3, eslint-plugin-lit-a11y@^2.3.0:
+eslint-plugin-lit-a11y@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-lit-a11y/-/eslint-plugin-lit-a11y-2.3.0.tgz#218f97392af0eec2df7601bc31095bd7e06780c3"
   integrity sha512-k6j7I6hGJmcojFHIotACgnNgggcK4fvYy+uTVrdseenyzp13yacSlaJtvC3k5kEAKoSIVK1fYiKbufYnvEFegQ==
@@ -2175,6 +2185,23 @@ eslint-plugin-lit-a11y@^2.2.3, eslint-plugin-lit-a11y@^2.3.0:
     eslint-rule-extender "0.0.1"
     language-tags "^1.0.5"
     parse5 "^5.1.1"
+    parse5-htmlparser2-tree-adapter "^6.0.1"
+    requireindex "~1.2.0"
+
+eslint-plugin-lit-a11y@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-lit-a11y/-/eslint-plugin-lit-a11y-4.0.0.tgz#904ffc8e5ef2a84dbd8e808ad84af01bb9b67fba"
+  integrity sha512-0qVe6Wz9/NzZs+0BwjetVRaSRs48dWgMKshmLmhrL3p3Ko86ujJdP4xkWMDsFJwJa58zJmTj2NKmraqPD0N54w==
+  dependencies:
+    aria-query "^5.1.3"
+    axe-core "^4.3.3"
+    axobject-query "^2.2.0"
+    dom5 "^3.0.1"
+    emoji-regex "^10.2.1"
+    eslint-plugin-lit "^1.6.0"
+    eslint-rule-extender "0.0.1"
+    language-tags "^1.0.5"
+    parse5 "^7.1.2"
     parse5-htmlparser2-tree-adapter "^6.0.1"
     requireindex "~1.2.0"
 
@@ -4478,6 +4505,13 @@ parse5@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
+
+parse5@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-7.1.2.tgz#0736bebbfd77793823240a23b7fc5e010b7f8e32"
+  integrity sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==
+  dependencies:
+    entities "^4.4.0"
 
 path-exists@^3.0.0:
   version "3.0.0"
